@@ -1,0 +1,63 @@
+{
+  "name": "tanstack-start-example-basic",
+  "private": true,
+  "sideEffects": false,
+  "type": "module",
+  "scripts": {
+    "build": "react-router build",
+    "dev": "react-router dev",
+    "start": "react-router-serve ./build/server/index.js",
+    "typecheck": "react-router typegen && tsc",
+    "format": "prettier --write . '*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,html,css,json}'"
+  },
+  "dependencies": {
+    "@base-ui-components/react": "^1.0.0-beta.0",
+    "@react-router/fs-routes": "^7.6.2",
+    "@react-router/node": "^7.6.2",
+    "@react-router/serve": "^7.6.2",
+    "@t3-oss/env-core": "^0.13.6",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "isbot": "^5",
+    "lucide-react": "^0.513.0",
+    "openid-client": "^6.5.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router": "^7.6.2",
+    "tailwind-merge": "^3.3.0",
+    "valibot": "^1.1.0",
+    "vite": "^6.3.5"
+  },
+  "devDependencies": {
+    "@eslint/compat": "^1.2.9",
+    "@eslint/js": "^9.28.0",
+    "@react-router/dev": "^7.6.2",
+    "@types/node": "^22.15.29",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.6",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.28.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.2.0",
+    "postcss": "^8.5.4",
+    "prettier": "^3.5.3",
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "react-router-devtools": "^5.0.6",
+    "tailwindcss": "^4.1.10",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.33.1",
+    "vite-env-only": "^3.0.3",
+    "vite-plugin-devtools-json": "^0.2.0",
+    "vite-tsconfig-paths": "^5.1.4"
+  },
+  "overrides": {
+    "@react-router/dev": {
+      "valibot": "$valibot"
+    }
+  },
+  "engines": {
+    "node": ">=23.5.0",
+    "npm": ">=10.9.2"
+  }
+}
