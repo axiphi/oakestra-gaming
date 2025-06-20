@@ -1,100 +1,66 @@
-import { cva, type VariantProps } from "class-variance-authority";
-import * as React from "react";
+import * as React from "react"
+import { cva, type VariantProps } from "class-variance-authority"
 
-import { cn } from "~/lib/cn";
+import { cn } from "~/lib/utils"
 
 const alertVariants = cva(
-  "flex w-full items-start space-x-4 rounded-md border p-4",
+  "relative w-full rounded-lg border px-4 py-3 text-sm grid has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] grid-cols-[0_1fr] has-[>svg]:gap-x-3 gap-y-0.5 items-start [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current",
   {
     variants: {
       variant: {
-        default:
-          "bg-card text-foreground **:data-[description=true]:text-muted-foreground",
-        warning: "border-warning-border bg-warning text-warning-foreground",
-        danger: "border-danger-border bg-danger text-danger-foreground",
-        info: "border-info-border bg-info text-info-foreground",
-        success: "border-success-border bg-success text-success-foreground",
+        default: "bg-card text-card-foreground",
+        destructive:
+          "text-destructive bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-destructive/90",
       },
     },
     defaultVariants: {
       variant: "default",
     },
-  },
-);
+  }
+)
 
-export interface AlertProps
-  extends VariantProps<typeof alertVariants>,
-    React.HTMLAttributes<HTMLDivElement> {}
-
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
-  ({ className, variant, ...props }, ref) => (
+function Alert({
+  className,
+  variant,
+  ...props
+}: React.ComponentProps<"div"> & VariantProps<typeof alertVariants>) {
+  return (
     <div
-      ref={ref}
+      data-slot="alert"
+      role="alert"
       className={cn(alertVariants({ variant }), className)}
       {...props}
     />
-  ),
-);
-Alert.displayName = "Alert";
+  )
+}
 
-const AlertContent = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("flex flex-1 flex-col gap-y-2", className)}
-    {...props}
-  />
-));
-AlertContent.displayName = "AlertContent";
+function AlertTitle({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="alert-title"
+      className={cn(
+        "col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight",
+        className
+      )}
+      {...props}
+    />
+  )
+}
 
-const AlertIcon = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("[&>svg]:size-4", className)} {...props} />
-));
-AlertIcon.displayName = "AlertIcon";
+function AlertDescription({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="alert-description"
+      className={cn(
+        "text-muted-foreground col-start-2 grid justify-items-start gap-1 text-sm [&_p]:leading-relaxed",
+        className
+      )}
+      {...props}
+    />
+  )
+}
 
-const AlertTitle = React.forwardRef<
-  HTMLHeadingElement,
-  React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
-  <h4
-    ref={ref}
-    className={cn("text-sm font-medium leading-none tracking-tight", className)}
-    {...props}
-  />
-));
-AlertTitle.displayName = "AlertTitle";
-
-const AlertDescription = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("text-sm", className)}
-    data-description={true}
-    {...props}
-  />
-));
-AlertDescription.displayName = "AlertDescription";
-
-const AlertAction = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("ml-auto self-center", className)} {...props} />
-));
-AlertAction.displayName = "AlertAction";
-
-export {
-  Alert,
-  AlertAction,
-  AlertContent,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
-};
+export { Alert, AlertTitle, AlertDescription }

@@ -1,7 +1,7 @@
 import * as client from "openid-client";
 import { redirect } from "react-router";
 import * as v from "valibot";
-import { authConfig } from "~/lib/auth";
+import { authConfig } from "~/lib/auth.server";
 import { commitSession, getSession } from "~/lib/session";
 import type { Route } from "./+types/route";
 

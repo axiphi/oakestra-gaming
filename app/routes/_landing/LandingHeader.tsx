@@ -15,14 +15,12 @@ export function LandingHeader() {
         </span>
       </div>
       <div className="flex flex-row items-center justify-center gap-4">
-        <Button
-          variant="outline"
-          render={<Link to="/auth/log-in" />}
-          className="border-primary p-6 text-primary"
-        >
-          <div className="flex flex-row items-center justify-center gap-2 text-lg">
-            Log In
-          </div>
+        <Button variant="outline" asChild>
+          <Link className="border-primary p-6 text-primary" to="/auth/log-in">
+            <div className="flex flex-row items-center justify-center gap-2 text-lg">
+              Log In
+            </div>
+          </Link>
         </Button>
       </div>
     </header>

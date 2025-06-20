@@ -1,15 +1,7 @@
 import { createEnv } from "@t3-oss/env-core";
 import * as v from "valibot";
-import { loadEnv } from "vite";
-import { serverOnly$ } from "vite-env-only/macros";
+import { loadServerEnv } from "~/lib/env.server";
 import { UserSchema } from "~/lib/user";
-
-const loadServerEnv = serverOnly$(() => {
-  return {
-    ...loadEnv(import.meta.env.MODE, process.cwd(), ""),
-    ...process.env,
-  };
-});
 
 export const env = createEnv({
   server: {
@@ -25,5 +17,5 @@ export const env = createEnv({
   clientPrefix: "VITE_",
   emptyStringAsUndefined: true,
   isServer: import.meta.env.SSR,
-  runtimeEnv: import.meta.env.SSR ? loadServerEnv!() : import.meta.env,
+  runtimeEnv: import.meta.env.SSR ? await loadServerEnv() : import.meta.env,
 });

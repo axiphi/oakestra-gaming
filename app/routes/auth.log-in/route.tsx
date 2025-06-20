@@ -1,6 +1,6 @@
 import * as client from "openid-client";
-import { authConfig } from "~/lib/auth";
 import { redirect } from "react-router";
+import { authConfig } from "~/lib/auth.server";
 import { env } from "~/lib/env";
 
 export async function loader() {

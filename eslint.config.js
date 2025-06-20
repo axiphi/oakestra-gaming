@@ -2,7 +2,6 @@ import { includeIgnoreFile } from "@eslint/compat";
 import eslintJs from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
 import eslintPluginReact from "eslint-plugin-react";
-import eslintPluginTailwindcss from "eslint-plugin-tailwindcss";
 import globals from "globals";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -17,7 +16,6 @@ export default [
   eslintJs.configs.recommended,
   ...typescriptEslint.configs.recommended,
   eslintPluginReact.configs.flat.recommended,
-  ...eslintPluginTailwindcss.configs["flat/recommended"],
   eslintConfigPrettier,
   {
     settings: {

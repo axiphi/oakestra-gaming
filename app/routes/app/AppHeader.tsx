@@ -8,7 +8,7 @@ export function AppHeader() {
       <div className="flex flex-row items-center justify-center text-3xl">
         <img alt="Oakestra Logo" src="/oakestra-logo.png" className="size-20" />
         <span>
-          <span className="font-['Quicksand']  font-bold text-secondary-foreground">
+          <span className="font-['Quicksand'] font-bold text-secondary-foreground">
             Oakestra
           </span>
           &nbsp;
@@ -16,15 +16,13 @@ export function AppHeader() {
         </span>
       </div>
       <div className="flex flex-row items-center justify-center gap-4">
-        <Button
-          variant="outline"
-          render={<Link to="/app/instances" />}
-          className="border-primary p-6 text-primary"
-        >
-          <div className="flex flex-row items-center justify-center gap-2 text-lg">
-            <UserRound size={24} />
-            Account
-          </div>
+        <Button variant="outline" asChild>
+          <Link to="/app/instances" className="border-primary p-6 text-primary">
+            <div className="flex flex-row items-center justify-center gap-2 text-lg">
+              <UserRound size={24} />
+              Account
+            </div>
+          </Link>
         </Button>
       </div>
     </header>

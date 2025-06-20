@@ -1,71 +1,45 @@
-import * as React from "react";
-import { LabelHTMLAttributes } from "react";
-import { Radio } from "@base-ui-components/react/radio";
-import { RadioGroup as BaseRadioGroup } from "@base-ui-components/react/radio-group";
+"use client"
 
-import { cn } from "~/lib/cn";
-import { Card } from "~/components/ui/card";
+import * as React from "react"
+import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
+import { CircleIcon } from "lucide-react"
 
-const RadioGroup = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentPropsWithoutRef<typeof BaseRadioGroup>
->(({ className, ...props }, ref) => (
-  <BaseRadioGroup
-    ref={ref}
-    className={cn("flex flex-col gap-2", className)}
-    {...props}
-  />
-));
-RadioGroup.displayName = "RadioGroup";
+import { cn } from "~/lib/utils"
 
-const RadioGroupItem = React.forwardRef<
-  HTMLButtonElement,
-  React.ComponentPropsWithoutRef<typeof Radio.Root>
->(({ className, ...props }, ref) => (
-  <Radio.Root
-    ref={ref}
-    className={cn(
-      "peer flex size-4 items-center justify-center rounded-full border focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 data-checked:border-primary",
-      className,
-    )}
-    {...props}
-  >
-    <Radio.Indicator className="flex before:size-2.5 before:rounded-full before:bg-primary data-unchecked:hidden" />
-  </Radio.Root>
-));
-RadioGroupItem.displayName = "RadioGroupItem";
+function RadioGroup({
+  className,
+  ...props
+}: React.ComponentProps<typeof RadioGroupPrimitive.Root>) {
+  return (
+    <RadioGroupPrimitive.Root
+      data-slot="radio-group"
+      className={cn("grid gap-3", className)}
+      {...props}
+    />
+  )
+}
 
-const RadioGroupCardItem = React.forwardRef<
-  HTMLButtonElement,
-  Omit<React.ComponentPropsWithoutRef<typeof Radio.Root>, "render">
->(({ className, ...props }, ref) => (
-  <Radio.Root
-    ref={ref}
-    className={cn(
-      "focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 data-checked:border-primary",
-      className,
-    )}
-    render={(cardProps) => (
-      <Card
-        render={(buttonProps) => <button {...buttonProps} />}
-        {...cardProps}
-      />
-    )}
-    {...props}
-  />
-));
-RadioGroupCardItem.displayName = "RadioGroupCardItem";
+function RadioGroupItem({
+  className,
+  ...props
+}: React.ComponentProps<typeof RadioGroupPrimitive.Item>) {
+  return (
+    <RadioGroupPrimitive.Item
+      data-slot="radio-group-item"
+      className={cn(
+        "border-input text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 aspect-square size-4 shrink-0 rounded-full border shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50",
+        className
+      )}
+      {...props}
+    >
+      <RadioGroupPrimitive.Indicator
+        data-slot="radio-group-indicator"
+        className="relative flex items-center justify-center"
+      >
+        <CircleIcon className="fill-primary absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2" />
+      </RadioGroupPrimitive.Indicator>
+    </RadioGroupPrimitive.Item>
+  )
+}
 
-const RadioGroupCardLabel = React.forwardRef<
-  HTMLLabelElement,
-  LabelHTMLAttributes<HTMLLabelElement>
->(({ className, ...props }, ref) => (
-  <label
-    ref={ref}
-    className={cn("text-base font-semibold", className)}
-    {...props}
-  />
-));
-RadioGroupCardLabel.displayName = "RadioGroupCardLabel";
-
-export { RadioGroup, RadioGroupItem, RadioGroupCardItem, RadioGroupCardLabel };
+export { RadioGroup, RadioGroupItem }

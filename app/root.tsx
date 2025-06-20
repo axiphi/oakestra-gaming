@@ -10,7 +10,7 @@ import {
 import type { ReactNode } from "react";
 import { getSession, sessionContext } from "~/lib/session";
 import type { Route } from "./+types/root";
-import "./app.css";
+import appCss from "./app.css?url";
 
 export const unstable_middleware: Route.unstable_MiddlewareFunction[] = [
   async ({ context, request }, next) => {
@@ -19,14 +19,25 @@ export const unstable_middleware: Route.unstable_MiddlewareFunction[] = [
   },
 ];
 
-export const links: Route.LinksFunction = () => [];
+export const links: Route.LinksFunction = () => [
+  { rel: "stylesheet", href: appCss },
+  { rel: "icon", href: "/favicon.svg" },
+];
+
+export const meta: Route.MetaFunction = () => [
+  {
+    charSet: "utf-8",
+  },
+  {
+    name: "viewport",
+    content: "width=device-width, initial-scale=1",
+  },
+];
 
 export function Layout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className="h-full">
       <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
