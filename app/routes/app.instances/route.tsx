@@ -46,6 +46,9 @@ export async function action({ request }: Route.ActionArgs) {
     return submission.reply();
   }
 
+  // await createService(...);
+  // await deployInstance(...);
+
   console.log(
     "TODO - make request to Oakestra root manager with SLA",
     submission,
