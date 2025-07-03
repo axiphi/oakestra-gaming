@@ -15,6 +15,9 @@ import {
 } from "~/components/ui/navigation-card";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Separator } from "~/components/ui/separator";
+import { sessionContext } from "~/lib/session";
+import { createInstance } from "~/routes/app.instances/internal-api.server/create-instance";
+import { getInstances } from "~/routes/app.instances/internal-api.server/get-instances";
 import type { Route } from "./+types/route";
 import {
   NewInstanceDialog,
@@ -26,17 +29,25 @@ interface Instance {
   name: string;
 }
 
-const instances: readonly Instance[] = [
-  { id: "system-1", name: "System 1" },
-  { id: "system-2", name: "System 2" },
-  { id: "system-3", name: "System 3" },
-  { id: "system-4", name: "System 4" },
-  { id: "system-5", name: "System 5" },
-  { id: "system-6", name: "System 6" },
-  { id: "system-7", name: "System 7" },
-];
+export async function loader({ context, request }: Route.LoaderArgs) {
+  const session = context.get(sessionContext);
 
-export async function action({ request }: Route.ActionArgs) {
+  if (!session.user) {
+    return redirect("/");
+  }
+
+  return {
+    instances: await getInstances(session.user.id, request.signal),
+  };
+}
+
+export async function action({ request, context }: Route.ActionArgs) {
+  const session = context.get(sessionContext);
+
+  if (!session.user) {
+    return redirect("/");
+  }
+
   const formData = await request.formData();
   const submission = parseWithValibot(formData, {
     schema: NewInstanceServerSchema,
@@ -46,18 +57,11 @@ export async function action({ request }: Route.ActionArgs) {
     return submission.reply();
   }
 
-  // await createService(...);
-  // await deployInstance(...);
-
-  console.log(
-    "TODO - make request to Oakestra root manager with SLA",
-    submission,
-  );
-
+  await createInstance(session.user.id, submission.value, request.signal);
   return redirect("/app/instances/");
 }
 
-export default function Page({ actionData }: Route.ComponentProps) {
+export default function Page({ actionData, loaderData }: Route.ComponentProps) {
   const titleId = useId();
 
   return (
@@ -69,8 +73,8 @@ export default function Page({ actionData }: Route.ComponentProps) {
         <ScrollArea className="h-0 flex-auto border-y-2">
           <NavigationCardMenu aria-labelledby={titleId} orientation="vertical">
             <NavigationCardList className="p-4">
-              {instances.map((system) => (
-                <InstanceCard key={system.id} instance={system} />
+              {loaderData.instances.map((instance) => (
+                <InstanceCard key={instance.id} instance={instance} />
               ))}
             </NavigationCardList>
           </NavigationCardMenu>
@@ -78,7 +82,7 @@ export default function Page({ actionData }: Route.ComponentProps) {
         <NewInstanceDialog actionData={actionData} />
       </div>
       <Separator orientation="vertical" />
-      <div className="flex basis-3/5 flex-col items-center justify-center gap-4">
+      <div className="flex basis-3/5 flex-col">
         <Outlet />
       </div>
     </div>

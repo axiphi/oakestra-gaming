@@ -3,6 +3,7 @@ import { redirect } from "react-router";
 import * as v from "valibot";
 import { authConfig } from "~/lib/auth.server";
 import { commitSession, getSession } from "~/lib/session";
+import { userSchema } from "~/lib/user";
 import type { Route } from "./+types/route";
 
 export async function loader({ request }: Route.LoaderArgs) {
@@ -20,13 +21,12 @@ export async function loader({ request }: Route.LoaderArgs) {
     authConfig.oidcConfig,
     new URL(request.url),
   );
-  const email = v.parse(
-    v.pipe(v.string(), v.email()),
-    tokens.claims()?.["email"],
-  );
+  const id = v.parse(userSchema.entries.id, tokens.claims()?.["sub"]);
+  const email = v.parse(userSchema.entries.email, tokens.claims()?.["email"]);
 
   const session = await getSession();
   session.set("user", {
+    id: id,
     email: email,
     accessToken: tokens.access_token,
     refreshToken: tokens.refresh_token,

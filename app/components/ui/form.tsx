@@ -69,6 +69,26 @@ export function Field({ metadata, ...props }: FieldProps): ReactNode {
   );
 }
 
+export interface HiddenFieldProps extends ComponentProps<"input"> {
+  metadata: FieldMetadata<unknown, Record<string, unknown>, string[]>;
+  value: string | readonly string[] | number | undefined;
+}
+
+export function HiddenField({
+  metadata,
+  ...props
+}: HiddenFieldProps): ReactNode {
+  return (
+    <input
+      type="hidden"
+      id={metadata.id}
+      name={metadata.name}
+      form={metadata.formId}
+      {...props}
+    />
+  );
+}
+
 export type FieldLabel = ComponentProps<typeof Label>;
 
 export function FieldLabel({ className, ...props }: FieldLabel): ReactNode {

@@ -27,7 +27,7 @@ import {
 import type { Route } from "./+types/route";
 
 export const NewInstanceServerSchema = v.object({
-  vcpu: v.pipe(
+  vcpus: v.pipe(
     v.number("This is a required field"),
     v.integer("Only whole numbers are allowed"),
     v.minValue(1, "You need at least 1 vcpu"),
@@ -35,13 +35,18 @@ export const NewInstanceServerSchema = v.object({
   memory: v.pipe(
     v.number("This is a required field"),
     v.integer("Only whole numbers are allowed"),
-    v.minValue(128, "You need at least 128mb of memory"),
+    v.minValue(128, "You need at least 128MiB of memory"),
+  ),
+  storage: v.pipe(
+    v.number("This is a required field"),
+    v.integer("Only whole numbers are allowed"),
+    v.minValue(8192, "You need at least 8192MiB of disk space"),
   ),
 });
 
 const NewInstanceClientSchema = unstable_coerceFormValue(
   NewInstanceServerSchema,
-);
+) as unknown as typeof NewInstanceServerSchema;
 
 export function NewInstanceDialog({
   actionData,
@@ -51,6 +56,7 @@ export function NewInstanceDialog({
   const { pathname } = useLocation();
   const { state } = useNavigation();
   const navigate = useNavigate();
+
   const [form, fields] = useForm({
     lastResult: actionData,
     onValidate({ formData }) {
@@ -58,6 +64,11 @@ export function NewInstanceDialog({
     },
     shouldValidate: "onInput",
     shouldRevalidate: "onInput",
+    defaultValue: {
+      vcpus: 8,
+      memory: 8192,
+      storage: 16384,
+    },
   });
 
   return (
@@ -84,9 +95,8 @@ export function NewInstanceDialog({
           <DialogHeader className="mb-2">
             <DialogTitle>New instance</DialogTitle>
           </DialogHeader>
-
-          <Field metadata={fields.vcpu}>
-            <FieldLabel>vCPU</FieldLabel>
+          <Field metadata={fields.vcpus}>
+            <FieldLabel>vCPUs</FieldLabel>
             <FieldInput type="number" />
             <FieldDescription>
               the number of virtual cpu cores available to the VM
@@ -97,7 +107,15 @@ export function NewInstanceDialog({
             <FieldLabel>Memory</FieldLabel>
             <FieldInput type="number" />
             <FieldDescription>
-              the amount of memory available to the VM
+              the amount of memory available to the VM in MiB
+            </FieldDescription>
+            <FieldErrors />
+          </Field>
+          <Field metadata={fields.storage}>
+            <FieldLabel>Disk Space</FieldLabel>
+            <FieldInput type="number" />
+            <FieldDescription>
+              the amount of disk space available to the VM in MiB
             </FieldDescription>
             <FieldErrors />
           </Field>

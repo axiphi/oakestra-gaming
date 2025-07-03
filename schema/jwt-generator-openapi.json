@@ -1,0 +1,71 @@
+{
+  "openapi": "3.0.2",
+  "paths": {
+    "/create": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["access_token"]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "identity": {
+                    "type": "string"
+                  },
+                  "fresh": {
+                    "type": "boolean"
+                  },
+                  "expires_delta": {
+                    "type": "object",
+                    "properties": {
+                      "days": {
+                        "type": "number"
+                      },
+                      "seconds": {
+                        "type": "number"
+                      },
+                      "microseconds": {
+                        "type": "number"
+                      }
+                    }
+                  },
+                  "additional_claims": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "additional_headers": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "info": {
+    "title": "Oakestra JWT Generator",
+    "version": "v1"
+  }
+}

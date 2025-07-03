@@ -1,12 +1,13 @@
 import * as v from "valibot";
 
-export const UserSchema = v.object({
+export const userSchema = v.object({
+  id: v.pipe(v.string(), v.uuid()),
   email: v.pipe(v.string(), v.email()),
   accessToken: v.pipe(v.string(), v.nonEmpty()),
   refreshToken: v.optional(v.pipe(v.string(), v.nonEmpty())),
 });
 
-export type User = v.InferOutput<typeof UserSchema>;
+export type User = v.InferOutput<typeof userSchema>;
 
 // const fetchUser = createServerFn({ method: "GET" }).handler(async () => {
 //   const session = await useAppSession();
