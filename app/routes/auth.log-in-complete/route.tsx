@@ -8,7 +8,7 @@ import type { Route } from "./+types/route";
 
 export async function loader({ request }: Route.LoaderArgs) {
   if (authConfig.testUser) {
-    const session = await getSession();
+    const session = await getSession(request.headers.get("Cookie"));
     session.set("user", authConfig.testUser);
     return redirect("/app/instances", {
       headers: {
@@ -24,12 +24,16 @@ export async function loader({ request }: Route.LoaderArgs) {
   const id = v.parse(userSchema.entries.id, tokens.claims()?.["sub"]);
   const email = v.parse(userSchema.entries.email, tokens.claims()?.["email"]);
 
-  const session = await getSession();
+  const session = await getSession(request.headers.get("Cookie"));
   session.set("user", {
     id: id,
     email: email,
     accessToken: tokens.access_token,
     refreshToken: tokens.refresh_token,
   });
-  return redirect("/app/instances");
+  return redirect("/app/instances", {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
 }

@@ -3,7 +3,7 @@ import {
   parseWithValibot,
   unstable_coerceFormValue,
 } from "@conform-to/valibot";
-import { ArrowUpRightIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { type ReactNode } from "react";
 import { Link, useLocation, useNavigate, useNavigation } from "react-router";
 import * as v from "valibot";
@@ -85,15 +85,15 @@ export function NewInstanceDialog({
       <DialogTrigger asChild>
         <Button size="lg" className="gap-2" asChild>
           <Link to="/app/instances/new">
+            <PlusIcon />
             New Instance
-            <ArrowUpRightIcon />
           </Link>
         </Button>
       </DialogTrigger>
       <DialogContent>
-        <Form metadata={form} action="/app/instances" method="POST">
+        <Form metadata={form} action="/app/instances" method="POST" replace>
           <DialogHeader className="mb-2">
-            <DialogTitle>New instance</DialogTitle>
+            <DialogTitle>New Instance</DialogTitle>
           </DialogHeader>
           <Field metadata={fields.vcpus}>
             <FieldLabel>vCPUs</FieldLabel>

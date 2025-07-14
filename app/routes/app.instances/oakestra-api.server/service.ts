@@ -13,9 +13,15 @@ const serviceSchema = v.object({
   storage: v.number(),
   environment: v.array(v.string()),
   port: v.string(),
+  status: v.optional(v.string()),
   addresses: v.optional(
     v.object({
       rr_ip: v.optional(v.pipe(v.string(), v.ipv4())),
+    }),
+  ),
+  instance_list: v.array(
+    v.object({
+      status: v.optional(v.string()),
     }),
   ),
 });
@@ -183,4 +189,30 @@ export async function createOakestraService(
   }
 
   return v.parse(createServicesResponseSchema, serviceData);
+}
+
+export async function deleteOakestraService(
+  user: OakestraUser,
+  serviceId: string,
+  signal?: AbortSignal,
+): Promise<void> {
+  const { error: serviceError } = await systemManagerClient.DELETE(
+    "/api/service/{serviceid}",
+    {
+      params: {
+        path: {
+          serviceid: serviceId,
+        },
+      },
+      headers: {
+        Authorization: "Bearer " + user.accessToken,
+      },
+      signal: signal,
+    },
+  );
+  if (serviceError !== undefined) {
+    throw new Error("failed to delete oakestra service", {
+      cause: serviceError,
+    });
+  }
 }

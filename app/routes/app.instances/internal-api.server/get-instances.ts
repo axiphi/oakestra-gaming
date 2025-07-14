@@ -3,6 +3,7 @@ import { parse as uuidParse } from "uuid";
 import { env } from "~/lib/env";
 import type { Instance } from "~/routes/app.instances/internal-api.server/instance";
 import { parseInstancePortsFromOakestraEnv } from "~/routes/app.instances/internal-api.server/instance-ports";
+import { calculateCombinedInstanceStatus } from "~/routes/app.instances/internal-api.server/instance-status";
 import { getOakestraServicesByApp } from "~/routes/app.instances/oakestra-api.server/service";
 import { oakestraAppCache } from "../oakestra-api.server/app";
 import { oakestraUserCache } from "../oakestra-api.server/user";
@@ -53,6 +54,7 @@ export async function getInstances(
       vcpus: service.vcpus,
       storage: service.storage,
       ip: service.addresses?.rr_ip,
+      status: calculateCombinedInstanceStatus(service),
       ports,
     };
   });

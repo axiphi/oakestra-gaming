@@ -26,7 +26,6 @@ export async function getWolfPairRequests(
     throw new Error("failed to get pending wolf pairings");
   }
 
-  console.debug("REQUESTS", data.requests);
   return data.requests;
 }
 
@@ -36,7 +35,6 @@ export async function pairWolfClient(
   secret: string,
   signal?: AbortSignal,
 ): Promise<void> {
-  console.debug("SENT", secret, pin);
   const { data, error } = await wolfClient.POST("/api/v1/pair/client", {
     body: {
       pin: pin,

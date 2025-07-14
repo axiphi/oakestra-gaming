@@ -3,9 +3,10 @@ import { parse as uuidParse } from "uuid";
 import { env } from "~/lib/env";
 import type {
   Instance,
-  InstanceDetails,
+  InstancePairRequest,
 } from "~/routes/app.instances/internal-api.server/instance";
 import { parseInstancePortsFromOakestraEnv } from "~/routes/app.instances/internal-api.server/instance-ports";
+import { calculateCombinedInstanceStatus } from "~/routes/app.instances/internal-api.server/instance-status";
 import { getOakestraService } from "~/routes/app.instances/oakestra-api.server/service";
 import { getWolfPairRequests } from "~/routes/app.instances/wolf-api.server/pin";
 import { oakestraAppCache } from "../oakestra-api.server/app";
@@ -53,19 +54,17 @@ export async function getInstance(
     vcpus: service.vcpus,
     storage: service.storage,
     ip: service.addresses?.rr_ip,
+    status: calculateCombinedInstanceStatus(service),
     ports,
   };
 }
 
-export async function getInstanceDetails(
+export async function getInstancePairRequests(
   instance: Instance,
   signal?: AbortSignal,
-): Promise<InstanceDetails> {
+): Promise<InstancePairRequest[]> {
   if (!instance.ip) {
-    return {
-      ...instance,
-      pairRequests: [],
-    };
+    return [];
   }
 
   const pairRequests = instance.ip
@@ -75,11 +74,8 @@ export async function getInstanceDetails(
       )
     : [];
 
-  return {
-    ...instance,
-    pairRequests: pairRequests.map((req) => ({
-      clientIp: req.client_ip,
-      secret: req.pair_secret,
-    })),
-  };
+  return pairRequests.map((req) => ({
+    clientIp: req.client_ip,
+    secret: req.pair_secret,
+  }));
 }

@@ -1,4 +1,5 @@
 import type { InstancePorts } from "~/routes/app.instances/internal-api.server/instance-ports";
+import type { InstanceStatus } from "~/routes/app.instances/internal-api.server/instance-status";
 
 export interface Instance {
   id: string; // microserviceID
@@ -7,11 +8,8 @@ export interface Instance {
   vcpus: number; // vcpus
   storage: number; // vcpus
   ip: string | undefined; // addresses.rr_ip
+  status: InstanceStatus;
   ports: InstancePorts;
-}
-
-export interface InstanceDetails extends Instance {
-  pairRequests: InstancePairRequest[];
 }
 
 export interface InstancePairRequest {

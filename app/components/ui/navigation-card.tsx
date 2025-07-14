@@ -70,7 +70,6 @@ export function NavigationCardLink({
 }: React.ComponentProps<typeof NavigationMenuPrimitive.Link>) {
   const titleId = useId();
   const descriptionId = useId();
-  // data-highlighted:ring-1 data-highlighted:ring-ring
   return (
     <NavigationCardLinkContext.Provider
       value={{

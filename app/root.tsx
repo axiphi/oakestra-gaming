@@ -5,15 +5,17 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useRouteLoaderData,
 } from "react-router";
 
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { getSession, sessionContext } from "~/lib/session";
+import { cn } from "~/lib/utils";
 import type { Route } from "./+types/root";
 import appCss from "./app.css?url";
 
 export const unstable_middleware: Route.unstable_MiddlewareFunction[] = [
-  async ({ context, request }, next) => {
+  async ({ context, request }) => {
     const session = await getSession(request.headers.get("Cookie"));
     context.set(sessionContext, session.data);
   },
@@ -34,12 +36,66 @@ export const meta: Route.MetaFunction = () => [
   },
 ];
 
+export function loader({ context }: Route.LoaderArgs) {
+  const session = context.get(sessionContext);
+
+  return {
+    isInDarkMode: session.isInDarkMode,
+  };
+}
+
 export function Layout({ children }: { children: ReactNode }) {
+  const loaderData = useRouteLoaderData("root") as ReturnType<typeof loader>;
+
+  const htmlRef = useRef<HTMLHtmlElement>(null);
+  const [isSystemInDarkMode, setIsSystemInDarkMode] = useState<
+    boolean | undefined
+  >(() =>
+    import.meta.env.SSR
+      ? false
+      : window.matchMedia("(prefers-color-scheme: dark)").matches,
+  );
+  useEffect(() => {
+    const controller = new AbortController();
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener(
+      "change",
+      (event) => {
+        setIsSystemInDarkMode(event.matches);
+      },
+      { signal: controller.signal },
+    );
+    return () => controller.abort();
+  }, []);
+
+  const isInDarkMode = loaderData.isInDarkMode ?? isSystemInDarkMode ?? false;
+  useEffect(() => {
+    if (
+      !isInDarkMode &&
+      (htmlRef.current?.classList.contains("dark") ?? false)
+    ) {
+      htmlRef.current?.classList.remove("dark");
+    }
+  }, [isInDarkMode]);
+
   return (
-    <html lang="en" className="h-full">
+    <html
+      ref={htmlRef}
+      lang="en"
+      className={cn("h-full", {
+        dark: loaderData.isInDarkMode ?? isSystemInDarkMode ?? false,
+      })}
+    >
       <head>
         <Meta />
         <Links />
+        {loaderData.isInDarkMode === undefined && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html:
+                'if (window.matchMedia("(prefers-color-scheme: dark)").matches) document.documentElement.classList.add("dark");',
+            }}
+          />
+        )}
       </head>
       <body className="flex min-h-full flex-col">
         {children}

@@ -7,6 +7,7 @@ import { type User } from "~/lib/user";
 
 type SessionData = {
   user?: User | undefined;
+  isInDarkMode?: boolean | undefined;
 };
 
 type SessionFlashData = object;

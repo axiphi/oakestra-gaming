@@ -28,32 +28,13 @@ import {
 } from "~/components/ui/form";
 import { useRouteActionData } from "~/lib/action";
 import type {
-  InstanceDetails,
+  Instance,
   InstancePairRequest,
 } from "~/routes/app.instances/internal-api.server/instance";
 import type { Route as PairRoute } from "../app.instances.$instance-id.pair.$client-ip/+types/route";
 
-export interface PairRequestListProps {
-  instance: InstanceDetails;
-}
-
-export function PairRequests({ instance }: PairRequestListProps): ReactNode {
-  if (instance.pairRequests.length === 0) {
-    return null;
-  }
-
-  return (
-    <div className="mt-4 rounded-md border">
-      <h3 className="text-xl font-semibold">Pending Pair Requests</h3>
-      <p className="mt-1 text-sm text-muted-foreground">
-        The following clients are requesting to be paired with this instance.
-      </p>
-    </div>
-  );
-}
-
 interface PairDialogProps {
-  instance: InstanceDetails;
+  instance: Instance;
   pairRequest: InstancePairRequest;
 }
 
