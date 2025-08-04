@@ -162,7 +162,7 @@ export async function createOakestraService(
                 bandwidth_out: 0,
                 storage: service.storage,
                 port: service.port,
-                code: "containers-docker://10.44.128.2:10500/oakestra/vm-wolf:0.0.1",
+                code: env.OG_WOLF_IMAGE,
                 state: "",
                 added_files: [],
                 args: [],

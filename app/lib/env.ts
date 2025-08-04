@@ -23,6 +23,7 @@ export const env = createEnv({
     OG_SYSTEM_MANAGER_BASE_URL: v.pipe(v.string(), v.url()),
     OG_SERVICE_MANAGER_BASE_URL: v.pipe(v.string(), v.url()),
     OG_WOLF_API_KEY: v.pipe(v.string(), v.nonEmpty()),
+    OG_WOLF_IMAGE: v.pipe(v.string(), v.nonEmpty()),
   },
   client: {},
 
