@@ -16,9 +16,9 @@ export function createOakestraEnvFromInstancePorts(
     `WOLF_HTTP_PORT=${ports.http}`,
     `WOLF_HTTPS_PORT=${ports.https}`,
     `WOLF_CONTROL_PORT=${ports.control}`,
-    `WOLF_RTSP_PORT=${ports.rtsp}`,
-    `WOLF_VIDEO_PORT=${ports.video}`,
-    `WOLF_AUDIO_PORT=${ports.audio}`,
+    `WOLF_RTSP_SETUP_PORT=${ports.rtsp}`,
+    `WOLF_VIDEO_PING_PORT=${ports.video}`,
+    `WOLF_AUDIO_PING_PORT=${ports.audio}`,
   ];
 }
 
@@ -89,15 +89,15 @@ export function parseInstancePortsFromOakestraEnv(
         control = value;
         break;
       }
-      case "WOLF_RTSP_PORT": {
+      case "WOLF_RTSP_SETUP_PORT": {
         rtsp = value;
         break;
       }
-      case "WOLF_VIDEO_PORT": {
+      case "WOLF_VIDEO_PING_PORT": {
         video = value;
         break;
       }
-      case "WOLF_AUDIO_PORT": {
+      case "WOLF_AUDIO_PING_PORT": {
         audio = value;
         break;
       }
