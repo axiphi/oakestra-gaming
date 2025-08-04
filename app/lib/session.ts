@@ -18,7 +18,7 @@ export const { getSession, commitSession, destroySession } =
       name: "__session",
       maxAge: 5256000, // two months
       httpOnly: true,
-      secure: true,
+      secure: !env.OG_INSECURE,
       domain: new URL(env.OG_BASE_URL).hostname,
       secrets: [env.OG_SESSION_SECRET],
     },

@@ -22,7 +22,7 @@ export const authConfig = env.OG_TEST_USER
         env.OG_OIDC_CLIENT_ID,
         env.OG_OIDC_CLIENT_SECRET,
         undefined,
-        import.meta.env.DEV
+        env.OG_INSECURE
           ? {
               execute: [client.allowInsecureRequests],
             }
